@@ -1,5 +1,6 @@
 package com.assignment.mr_blue.response;
 
+import com.assignment.mr_blue.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,5 +20,11 @@ public class GetPostResponse {
         this.id = id;
         this.title = title;
         this.content = content;
+    }
+
+    public GetPostResponse(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
     }
 }

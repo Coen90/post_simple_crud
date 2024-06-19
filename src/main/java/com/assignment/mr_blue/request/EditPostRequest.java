@@ -7,14 +7,14 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class editPostRequest {
+public class EditPostRequest {
 
     private final String title;
 
     private final String content;
 
     @Builder
-    public editPostRequest(String title, String content) {
+    public EditPostRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }

@@ -3,11 +3,15 @@ package com.assignment.mr_blue.service;
 import com.assignment.mr_blue.domain.Post;
 import com.assignment.mr_blue.repository.PostRepository;
 import com.assignment.mr_blue.request.CreatePostRequest;
-import com.assignment.mr_blue.request.editPostRequest;
+import com.assignment.mr_blue.request.EditPostRequest;
+import com.assignment.mr_blue.request.GetPostListRequest;
 import com.assignment.mr_blue.response.CreatePostResponse;
 import com.assignment.mr_blue.response.EditPostResponse;
+import com.assignment.mr_blue.response.GetPostListResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +42,7 @@ public class PostService {
     }
 
     @Transactional
-    public EditPostResponse editPost(Long id, editPostRequest request) {
+    public EditPostResponse editPost(Long id, EditPostRequest request) {
         Post postEntity = postRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
         Post requestEntity = request.toEntity();
@@ -56,6 +60,17 @@ public class PostService {
                 .orElseThrow(RuntimeException::new);
         postRepository.delete(postEntity);
         return id;
+    }
+
+    public GetPostListResponse getPostResponseList(GetPostListRequest request) {
+        Page<Post> list = postRepository.findAll(PageRequest.of(request.getPage(), request.getSize()));
+        return GetPostListResponse.builder()
+                .hasNext(list.hasNext())
+                .list(list
+                        .stream()
+                        .map(GetPostResponse::new)
+                        .toList())
+                .build();
     }
 
 }
