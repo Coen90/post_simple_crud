@@ -17,10 +17,12 @@ public class PostService {
     private final PostRepository postRepository;
 
     public GetPostResponse getPost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(RuntimeException::new);
         return GetPostResponse.builder()
-                .id(id)
-                .title("test Title")
-                .content("test content")
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
                 .build();
     }
 
