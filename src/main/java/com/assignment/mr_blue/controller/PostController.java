@@ -1,7 +1,11 @@
 package com.assignment.mr_blue.controller;
 
-import com.assignment.mr_blue.domain.Post;
+import com.assignment.mr_blue.request.CreatePostRequest;
+import com.assignment.mr_blue.request.editPostRequest;
+import com.assignment.mr_blue.response.CreatePostResponse;
+import com.assignment.mr_blue.response.EditPostResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
+import com.assignment.mr_blue.service.PostService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,37 +15,34 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@RequiredArgsConstructor
 public class PostController {
 
+    private final PostService postService;
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<GetPostResponse> getPost(@PathVariable(name = "postId") Long id) {
-        GetPostResponse res = GetPostResponse.builder()
-                .id(id)
-                .title("test Title")
-                .content("test content")
-                .build();
         return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(res);
+                .body(postService.getPost(id));
     }
 
     @PostMapping("/post")
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        log.debug(post.toString());
+    public ResponseEntity<CreatePostResponse> createPost(@RequestBody CreatePostRequest req) {
+        log.debug(req.toString());
         return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(post);
+                .body(postService.createPost(req));
     }
 
     @PatchMapping("/post/{postId}")
-    public ResponseEntity<Post> editPost(@PathVariable(name = "postId") Long id, @RequestBody Post post) {
-        log.debug(post.toString());
+    public ResponseEntity<EditPostResponse> editPost(@PathVariable(name = "postId") Long id, @RequestBody editPostRequest req) {
+        log.debug(req.toString());
         return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(post);
+                .body(postService.editPost(req));
     }
 
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable(name = "postId") Long id) {
         return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(id + " deleted");
+                .body(postService.deletePost(id) + " deleted");
     }
 }
