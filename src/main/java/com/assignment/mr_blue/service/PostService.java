@@ -22,7 +22,7 @@ public class PostService {
     public CreatePostResponse createPost(CreatePostRequest request) {
         Post postEntity = request.toEntity();
         return CreatePostResponse.builder()
-                .id(1)
+                .id(postEntity.getId())
                 .build();
     }
 
