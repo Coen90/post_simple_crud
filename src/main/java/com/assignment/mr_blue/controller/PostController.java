@@ -3,7 +3,6 @@ package com.assignment.mr_blue.controller;
 import com.assignment.mr_blue.request.CreatePostRequest;
 import com.assignment.mr_blue.request.EditPostRequest;
 import com.assignment.mr_blue.request.GetPostListRequest;
-import com.assignment.mr_blue.response.CreatePostResponse;
 import com.assignment.mr_blue.response.EditPostResponse;
 import com.assignment.mr_blue.response.GetPostListResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
@@ -29,9 +28,8 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<CreatePostResponse> createPost(@RequestBody CreatePostRequest req) {
-        return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(postService.createPost(req));
+    public void createPost(@RequestBody CreatePostRequest req) {
+        postService.createPost(req);
     }
 
     @PatchMapping("/post/{postId}")

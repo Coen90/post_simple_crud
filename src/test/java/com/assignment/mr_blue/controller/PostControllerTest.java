@@ -15,7 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,6 +116,26 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.content").value(editContent))
                 .andDo(MockMvcResultHandlers.print());
 
+    }
+
+    @Test
+    @DisplayName("Delete Post Test")
+    void testDeletePost() throws Exception {
+        // given
+        String title = "test post";
+        String content = "test content";
+        Post post = Post.builder()
+                .title(title)
+                .content(content)
+                .build();
+        Post save = postRepository.save(post);
+
+        // when
+        // then
+        mockMvc.perform(delete("/api/post/{postId}", save.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
