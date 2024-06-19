@@ -9,9 +9,11 @@ import com.assignment.mr_blue.response.EditPostResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
@@ -26,6 +28,7 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public CreatePostResponse createPost(CreatePostRequest request) {
         Post postEntity = request.toEntity();
         Post save = postRepository.save(postEntity);
@@ -34,12 +37,16 @@ public class PostService {
                 .build();
     }
 
-    public EditPostResponse editPost(editPostRequest request) {
-        Post entity = request.toEntity();
+    @Transactional
+    public EditPostResponse editPost(Long id, editPostRequest request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(RuntimeException::new);
+        Post requestEntity = request.toEntity();
+        post.edit(requestEntity);
         return EditPostResponse.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .content(entity.getContent())
+                .id(id)
+                .title(requestEntity.getTitle())
+                .content(requestEntity.getContent())
                 .build();
     }
 

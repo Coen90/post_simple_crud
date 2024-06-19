@@ -36,7 +36,7 @@ public class PostController {
     public ResponseEntity<EditPostResponse> editPost(@PathVariable(name = "postId") Long id, @RequestBody editPostRequest req) {
         log.debug(req.toString());
         return ResponseEntity.status(HttpServletResponse.SC_OK)
-                .body(postService.editPost(req));
+                .body(postService.editPost(id, req));
     }
 
     @DeleteMapping("/post/{postId}")

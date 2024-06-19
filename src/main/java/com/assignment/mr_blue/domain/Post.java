@@ -25,4 +25,9 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    public void edit(Post post) {
+        this.title = post.title;
+        this.content = post.content;
+    }
 }
