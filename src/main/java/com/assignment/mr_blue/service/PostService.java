@@ -1,15 +1,20 @@
 package com.assignment.mr_blue.service;
 
 import com.assignment.mr_blue.domain.Post;
+import com.assignment.mr_blue.repository.PostRepository;
 import com.assignment.mr_blue.request.CreatePostRequest;
 import com.assignment.mr_blue.request.editPostRequest;
 import com.assignment.mr_blue.response.CreatePostResponse;
 import com.assignment.mr_blue.response.EditPostResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
+
+    private final PostRepository postRepository;
 
     public GetPostResponse getPost(Long id) {
         return GetPostResponse.builder()
@@ -21,8 +26,9 @@ public class PostService {
 
     public CreatePostResponse createPost(CreatePostRequest request) {
         Post postEntity = request.toEntity();
+        Post save = postRepository.save(postEntity);
         return CreatePostResponse.builder()
-                .id(postEntity.getId())
+                .id(save.getId())
                 .build();
     }
 

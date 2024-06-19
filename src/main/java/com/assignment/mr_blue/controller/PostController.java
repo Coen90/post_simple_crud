@@ -28,7 +28,6 @@ public class PostController {
 
     @PostMapping("/post")
     public ResponseEntity<CreatePostResponse> createPost(@RequestBody CreatePostRequest req) {
-        log.debug(req.toString());
         return ResponseEntity.status(HttpServletResponse.SC_OK)
                 .body(postService.createPost(req));
     }
