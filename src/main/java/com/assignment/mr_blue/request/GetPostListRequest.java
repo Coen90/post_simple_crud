@@ -14,7 +14,11 @@ public class GetPostListRequest {
     // TODO default value 개선하기
     @Builder
     public GetPostListRequest(int page, int size) {
-        this.page = page;
+        if (page == 0) {
+            this.page = 1;
+        } else {
+            this.page = page;
+        }
         if (size == 0 || size > 100) {
             this.size = 10;
         } else {

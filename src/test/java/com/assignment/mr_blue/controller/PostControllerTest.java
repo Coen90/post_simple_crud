@@ -5,6 +5,7 @@ import com.assignment.mr_blue.repository.PostRepository;
 import com.assignment.mr_blue.request.CreatePostRequest;
 import com.assignment.mr_blue.request.EditPostRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -136,6 +140,43 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Get Post List")
+    void testGetPostList() throws Exception {
+        // given
+        String title = "test post";
+        String content = "test content";
+        List<Post> postList = IntStream.range(1, 12)
+                .mapToObj(value -> Post.builder()
+                        .title(title + value)
+                        .content(content + value)
+                        .build())
+                .toList();
+        postRepository.saveAll(postList);
+
+        // then
+        mockMvc.perform(get("/api/posts?page=1&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postList.length()", Matchers.is(10)))
+                .andExpect(jsonPath("$.postList[0].id", Matchers.is(1)))
+                .andExpect(jsonPath("$.postList[0].title", Matchers.is(title + 1)))
+                .andExpect(jsonPath("$.postList[0].content", Matchers.is(content + 1)))
+                .andExpect(jsonPath("$.hasNext", Matchers.is(true)))
+                .andDo(print());
+        // then
+        mockMvc.perform(get("/api/posts?page=2&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postList.length()", Matchers.is(1)))
+                .andExpect(jsonPath("$.postList[0].id", Matchers.is(11)))
+                .andExpect(jsonPath("$.postList[0].title", Matchers.is(title + 11)))
+                .andExpect(jsonPath("$.postList[0].content", Matchers.is(content + 11)))
+                .andExpect(jsonPath("$.hasNext", Matchers.is(false)))
+                .andDo(print());
+
     }
 
 }

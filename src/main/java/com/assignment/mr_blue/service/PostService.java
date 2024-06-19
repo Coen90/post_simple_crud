@@ -63,10 +63,10 @@ public class PostService {
     }
 
     public GetPostListResponse getPostResponseList(GetPostListRequest request) {
-        Page<Post> list = postRepository.findAll(PageRequest.of(request.getPage(), request.getSize()));
+        Page<Post> list = postRepository.findAll(PageRequest.of(request.getPage() - 1, request.getSize()));
         return GetPostListResponse.builder()
                 .hasNext(list.hasNext())
-                .list(list
+                .postList(list
                         .stream()
                         .map(GetPostResponse::new)
                         .toList())

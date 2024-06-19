@@ -35,7 +35,7 @@ class PostServiceTest {
                 .page(0)
                 .size(10)
                 .build());
-        System.out.println(list.getList().stream().map(GetPostResponse::toString)
+        System.out.println(list.getPostList().stream().map(GetPostResponse::toString)
                 .collect(Collectors.joining("\n")));
     }
 }

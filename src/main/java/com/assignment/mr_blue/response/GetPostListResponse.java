@@ -10,11 +10,11 @@ public class GetPostListResponse {
 
     private final boolean hasNext;
 
-    private final List<GetPostResponse> list;
+    private final List<GetPostResponse> postList;
 
     @Builder
-    public GetPostListResponse(boolean hasNext, List<GetPostResponse> list) {
+    public GetPostListResponse(boolean hasNext, List<GetPostResponse> postList) {
         this.hasNext = hasNext;
-        this.list = list;
+        this.postList = postList;
     }
 }
