@@ -39,10 +39,10 @@ public class PostService {
 
     @Transactional
     public EditPostResponse editPost(Long id, editPostRequest request) {
-        Post post = postRepository.findById(id)
+        Post postEntity = postRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
         Post requestEntity = request.toEntity();
-        post.edit(requestEntity);
+        postEntity.edit(requestEntity);
         return EditPostResponse.builder()
                 .id(id)
                 .title(requestEntity.getTitle())
@@ -50,7 +50,11 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public long deletePost(Long id) {
+        Post postEntity = postRepository.findById(id)
+                .orElseThrow(RuntimeException::new);
+        postRepository.delete(postEntity);
         return id;
     }
 
