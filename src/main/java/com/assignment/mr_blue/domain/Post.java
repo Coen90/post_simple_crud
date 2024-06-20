@@ -21,7 +21,6 @@ public class Post {
 
     @Builder
     public Post(long id, String title, String content) {
-        this.id = id;
         this.title = title;
         this.content = content;
     }

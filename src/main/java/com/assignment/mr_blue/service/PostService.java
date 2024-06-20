@@ -5,7 +5,6 @@ import com.assignment.mr_blue.repository.PostRepository;
 import com.assignment.mr_blue.request.CreatePostRequest;
 import com.assignment.mr_blue.request.EditPostRequest;
 import com.assignment.mr_blue.request.GetPostListRequest;
-import com.assignment.mr_blue.response.CreatePostResponse;
 import com.assignment.mr_blue.response.EditPostResponse;
 import com.assignment.mr_blue.response.GetPostListResponse;
 import com.assignment.mr_blue.response.GetPostResponse;
@@ -33,12 +32,9 @@ public class PostService {
     }
 
     @Transactional
-    public CreatePostResponse createPost(CreatePostRequest request) {
+    public void createPost(CreatePostRequest request) {
         Post postEntity = request.toEntity();
-        Post save = postRepository.save(postEntity);
-        return CreatePostResponse.builder()
-                .id(save.getId())
-                .build();
+        postRepository.save(postEntity);
     }
 
     @Transactional
